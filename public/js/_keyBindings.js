@@ -1,85 +1,14 @@
-// corecodetype.js
+// keyBindings.js
+
 'use strict';
-console.log('corecodetype.js');
 
 var debug = true;
-// var debug = false;
-
-var typing = false;
-var idx = 0;
-
-// This is a reference for &nbsp; in the html.
-// Needed to because a " " by &nbsp; does not
-// equal " " from keyDown spacebar.
-var ref_char = $('#spacebar_ref').text();
-
-function getChar(idx) {
-    // console.log('getChar');
-    var char = $('.code span').eq(idx).text();
-    return char;
-}
-
-function compareChar(char, event, keyid) {
-    if (event.key == char || 
-        (event.code == "Space" && char == ref_char)) { 
-        return 1;
-    } else {
-        return -1;
-    }
-}
-
-function updateDisplay(state) {
-    var display = "";
-    var last = idx - 1;
-
-    if (state === 1) { 
-        display = 'correct'
-    } else if ( state === 0 ) {
-        // right key wrong secondary shift key
-        display = 'partial';
-    }
-    else if (state === -1) {
-        display = 'incorrect';
-    }
-    
-    $('.code span').eq(idx).addClass(display);
-    
-    if (!typing) { $('.code span').eq(0).removeClass('underline'); typing = true; }
-    if (last >=0) { $('.code span').eq(idx).removeClass('underline'); }
-
-
-    // $('.code span').eq(idx).removeClass('underline');
-
-    idx++;
-
-    $('.code span').eq(idx).addClass('underline');
-
-
-} // updateDisplay
-
-
-$('.code span').eq(idx).addClass('underline');
-
-function keyHandler(event, keyid) {
-
-    // $('.code span').eq(idx).addClass('underline');
-
-    var char = getChar(idx);
-
-    var state = compareChar(char, event, keyid);
-
-    console.log('state',  state);
-
-    updateDisplay(state);
-
-}  // keyHandler
-
-
+if (debug) console.log('keyBindings.js');
 
 // var myBindings = { "a": function() {console.log('this is a bindings test \
 // if it had been anything else you would have informed.');} };
 
-var myBindings = { "a": keyHandler, "b": keyHandler, "c": keyHandler, 
+var keyBindings = { "a": keyHandler, "b": keyHandler, "c": keyHandler, 
 "d": keyHandler, "e": keyHandler, "f": keyHandler, "g": keyHandler,
 "h": keyHandler, "i": keyHandler, "j": keyHandler, "k": keyHandler,
 "l": keyHandler, "m": keyHandler, "n": keyHandler, "o": keyHandler,
@@ -97,6 +26,7 @@ var myBindings = { "a": keyHandler, "b": keyHandler, "c": keyHandler,
 "U": keyHandler, "V": keyHandler, "W": keyHandler, "X": keyHandler, 
 "Y": keyHandler, "Z": keyHandler, 
 
+// shift key
 "shift_A": keyHandler, "shift_B": keyHandler, "shift_C": keyHandler, 
 "shift_D": keyHandler, "shift_E": keyHandler, "shift_F": keyHandler,
 "shift_G": keyHandler, "shift_H": keyHandler, "shift_I": keyHandler,
@@ -122,7 +52,7 @@ var myBindings = { "a": keyHandler, "b": keyHandler, "c": keyHandler,
 "\"": keyHandler, "<": keyHandler, ">": keyHandler, "?": keyHandler,
 "~": keyHandler,"`": keyHandler,
 
-
+// shift key
 "shift_)": keyHandler, "shift_!": keyHandler, "shift_@": keyHandler,
 "shift_#": keyHandler, "shift_$": keyHandler, "shift_%": keyHandler,
 "shift_^": keyHandler, "shift_&": keyHandler, "shift_*": keyHandler,
@@ -131,28 +61,11 @@ var myBindings = { "a": keyHandler, "b": keyHandler, "c": keyHandler,
 "shift_:": keyHandler, "shift_\"": keyHandler, "shift_<": keyHandler,
 "shift_>": keyHandler, "shift_?": keyHandler, "shift_~": keyHandler,
 
-
-
-"Backspace": keyHandler, "spacebar": keyHandler, ".":keyHandler,
+"Backspace": keyHandler, "spacebar": keyHandler, 
 "Enter":keyHandler, "Tab": keyHandler,
 
 // TEST  HERE
  // "shift_I": keyHandler,
 
 
-
 };  // End myBindings
-
-var myKeyMap = new Keymap(myBindings);
-
-myKeyMap.install(document);
-
-if (debug) {
-    document.addEventListener('keydown', function(e) {
-     e.key;
-     // debugger;
-     console.log('e.key: ', e.key);
-     console.log('e.code: ', e.code);
-     console.log('e.location: ', e.location);
-    });    
-}
