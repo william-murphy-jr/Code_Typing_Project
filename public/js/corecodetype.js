@@ -22,11 +22,19 @@ function getChar(idx) {
 function compareChar(char, event, keyid) {
     if (event.key == char || 
         (event.code == "Space" && char == ref_space)) { 
-        return 2;
+            if (keyid.location === 2) {
+                console.log('***** location 2 *****');
+                return 2;
+            } else if (keyid.location === 1) {
+                console.log('**** location 1 ****');
+                return 1;
+            } else { 
+                return 2; 
+            }
     } else {
-        return 0;
+        return -1;
     }
-}
+}  // compareChar
 
 function updateDisplay(state) {
     var display = "";
@@ -38,11 +46,13 @@ function updateDisplay(state) {
         // right key wrong secondary shift key
         display = 'partial';
     }
-    else if (state === 0) {
+    else if (state === -1) {
         display = 'incorrect';
     }
     
     $('.code span').eq(idx).addClass(display);
+
+    locationFired = false;
     
     if (!typing) { $('.code span').eq(0).removeClass('underline'); typing = true; }
     if (last >=0) { $('.code span').eq(idx).removeClass('underline'); }

@@ -1,6 +1,6 @@
 console.log('Keymap.js');
-// var debug = true;
-var debug = false;
+var debug = true;
+// var debug = false;
 
 /*
  * Keymap.js: bind key events to handler functions.
@@ -66,6 +66,12 @@ var debug = false;
  * not particularly portable to other keyboard layouts and should be avoided.
  */
 
+// Keep track of if the location has been set
+var locationFired = false;
+
+// Now cache the location
+var cachedLocation;
+
 // This is the constructor function
 function Keymap(bindings) {
 
@@ -102,17 +108,25 @@ Keymap.prototype.install = function(element) {
 Keymap.prototype.dispatch = function(event, element) {
 
     // We start off with no modifiers and no key name
-    var modifiers = ""
+    var modifiers = {};
     var keyname = null;
 
     // Build the modifier string in canonical lowercase alphabetical order.
     // Alt
     //
 
-    if (event.altKey) { modifiers += "alt_";     if (debug) console.log('modifier alt_'); }
-    if (event.ctrlKey) { modifiers += "ctrl_";   if (debug) console.log('modifier ctrl_'); }
-    if (event.metaKey) { modifiers += "meta_";   if (debug) console.log('modifier meta_'); }
-    if (event.shiftKey) { modifiers += "shift_"; if (debug) console.log('modifier shift_'); }
+    // if (event.altKey) { modifiers += "alt_";     if (debug) console.log('modifier alt_'); }
+    // if (event.ctrlKey) { modifiers += "ctrl_";   if (debug) console.log('modifier ctrl_'); }
+    // if (event.metaKey) { modifiers += "meta_";   if (debug) console.log('modifier meta_'); }
+    if (event.shiftKey) { 
+        modifiers.modifier += "shift_";
+        modifiers.location = event.location;
+        if (!locationFired) {
+            locationFired = true;
+            cachedLocation = modifiers.location;
+        }
+        if (debug) console.log('modifier shift_');
+    }
 
     // The keyname is easy if the DOM Level 3 key property is implemented:
     if (event.key) keyname = event.key;
@@ -129,11 +143,14 @@ Keymap.prototype.dispatch = function(event, element) {
 
     // The canonical key id is modifiers plus lowercase key name
     // var keyid = modifiers + keyname.toLowerCase();
-    var keyid = modifiers + keyname;
+    var keyid = {};
+    keyid.key = modifiers.modifier ? keyname : keyname;
+    keyid.location = cachedLocation;
+
     if (debug) console.log('keyid: ', keyid);
 
     // Now see if the key identifier is bound to anything
-    var handler = this.map[keyid];
+    var handler = this.map[keyid.key];
 
     if (handler) { // If there is a handler for this key, handle it
     // Invoke the handler function
