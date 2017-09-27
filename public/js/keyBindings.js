@@ -5,8 +5,16 @@
 var debug = true;
 if (debug) console.log('keyBindings.js');
 
+/* This file must be called before Keymap.js 
+ * and coreCodeType.js so we have:
+ * 
+ * keyBindings.js
+ * Keymap.js
+ * coreCodeType.js
+ */
+
 // We pass back an object of key:value pairs
-// to install in the Keymap class
+// to the Keymap consturctor/class
 function keyHandlerBingings() {  
 
     return {

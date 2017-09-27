@@ -5,18 +5,7 @@ var debug = false;
 /*
  * Keymap.js: bind key events to handler functions.
  *
- *****************  Change log ****************
- *
- *  Changed key mappeing for spacebar in Keymap.aliases: 
- *  old mapping:  "space":"spacebar", // legacy doesn not work in OS X others OS's *
- *  new mappings:  "space":" "     // modified for use with event.key = " "
- *                 "spacebar":" "  // modified for use with event.key = " "
- *
- *
- **************** End Change log ****************
- *
- *
-  * This module defines a Keymap class. An instance of this class represents a
+ * This module defines a Keymap class. An instance of this class represents a
  * mapping of key identifiers (defined below) to handler functions. A Keymap
  * can be installed on an HTML element to handle keydown events. When such an
  * event occurs, the Keymap uses its mapping to invoke the appropriate handler.

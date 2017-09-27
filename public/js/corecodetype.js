@@ -2,8 +2,8 @@
 'use strict';
 console.log('corecodetype.js');
 
-var debug = true;
-// var debug = false;
+// var debug = true;
+var debug = false;
 
 var typing = false;
 var idx = 0;
@@ -79,8 +79,8 @@ function keyHandler(event, keyid) {
 // var myBindings = { "a": function() {console.log('this is a bindings test \
 // if it had been anything else you would have informed.');} };
 
-// An object of key:value pairs is returned 
-// to be passed into Keymap(keyBindings).
+// An object of key:value pairs is returned.
+// value is the handler function keyHandler()
 var keyBindings =  keyHandlerBingings();
 
 var myKeyMap = new Keymap(keyBindings);
