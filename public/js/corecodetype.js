@@ -2,8 +2,8 @@
 'use strict';
 console.log('corecodetype.js');
 
-// var debug = true;
-var debug = false;
+var debug = true;
+// var debug = false;
 
 var typing = false;
 var idx = 0;
@@ -20,16 +20,43 @@ function getChar(idx) {
 }
 
 function compareChar(char, event, keyid) {
+    if (debug) console.log('keyid.key', keyid.key); 
+    if (debug) console.log('keyid.location', keyid.location); 
+    
     if (event.key == char || 
         (event.code == "Space" && char == ref_space)) { 
-            if (keyid.location === 2) {
-                console.log('***** location 2 *****');
+            if (keyid.location === 2 && (
+            char == "`" || char == "1" || char =="2" || char == "3" ||
+            char == "4" || char == "5" || char == "6" || char == "q" || 
+            char == "W" || char == "E" || char == "R" || char == "T" ||  
+            char == "A" || char == "S" || char == "D" || char == "F" || 
+            char == "G" || char == "Z" || char == "X" || char == "C" || 
+            char == "V" || char == "B" || char == "~" || char == "!" || 
+            char == "@" || char == "#" || char == "$" || char == "%" || 
+            char == "&" || char == "~" || char == "!" || char == "@" || 
+            char == "#" || char == "$" || char == "%" || char == "^" || 
+            char == "&" )) {
+                console.log('***** location 2 & correct *****');
                 return 2;
-            } else if (keyid.location === 1) {
-                console.log('**** location 1 ****');
-                return 1;
-            } else { 
-                return 2; 
+            } else if (keyid.location === 1 && (
+            char == "7" || char == "8" || char =="9" || char == "0" ||
+            char == "-" || char == "=" || char == "Y" || char == "U" || 
+            char == "I" || char == "O" || char == "P" || char == "[" ||  
+            char == "]" || char == "\\" || char == "H" || char == "J" || 
+            char == "K" || char == "L" || char == ";" || char == "'" || 
+            char == "N" || char == "M" || char == "," || char == "." || 
+            char == "/" || char == "&" || char == "*" || char == "(" || 
+            char == ")" || char == "_" || char == "+" || char == "{" || 
+            char == "}" || char == ":" || char == "\"" || char == "<" ||
+            char == ">" || char == "?" )) {
+                if (debug) console.log('**** location 1 && correct ****');
+                return 2;
+            } else if (keyid.location === 1 || keyid.location === 2 ) { 
+                if (debug) console.log('else partial correct return 1');
+                return 1; 
+            } else {
+                if (debug) console.log("lowercase letter's correct");
+                return 2;
             }
     } else {
         return -1;
@@ -39,6 +66,10 @@ function compareChar(char, event, keyid) {
 function updateDisplay(state) {
     var display = "";
     var last = idx - 1;
+
+    // reset these for the next key press/event
+    locationFired = false;
+    cachedLocation = null;
 
     if (state === 2) { 
         display = 'correct'
@@ -52,7 +83,6 @@ function updateDisplay(state) {
     
     $('.code span').eq(idx).addClass(display);
 
-    locationFired = false;
     
     if (!typing) { $('.code span').eq(0).removeClass('underline'); typing = true; }
     if (last >=0) { $('.code span').eq(idx).removeClass('underline'); }

@@ -1,3 +1,6 @@
+// Keymap.js
+'use strict';
+
 console.log('Keymap.js');
 var debug = true;
 // var debug = false;
@@ -111,16 +114,24 @@ Keymap.prototype.dispatch = function(event, element) {
     var modifiers = {};
     var keyname = null;
 
+    // On keyup remove cachedLocation value
+    // to prevent cache contamination if a key is
+    // pressed and released with no action.
+    document.addEventListener('keyup', function(e) {
+        cachedLocation = null;
+    });
+
     // Build the modifier string in canonical lowercase alphabetical order.
     // Alt
-    //
 
     // if (event.altKey) { modifiers += "alt_";     if (debug) console.log('modifier alt_'); }
     // if (event.ctrlKey) { modifiers += "ctrl_";   if (debug) console.log('modifier ctrl_'); }
     // if (event.metaKey) { modifiers += "meta_";   if (debug) console.log('modifier meta_'); }
+    
     if (event.shiftKey) { 
         modifiers.modifier += "shift_";
         modifiers.location = event.location;
+        
         if (!locationFired) {
             locationFired = true;
             cachedLocation = modifiers.location;
