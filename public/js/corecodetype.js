@@ -22,7 +22,7 @@ function getChar(idx) {
 function compareChar(char, event, keyid) {
     if (debug) console.log('keyid.key', keyid.key); 
     if (debug) console.log('keyid.location', keyid.location); 
-    
+
     if (event.key == char || 
         (event.code == "Space" && char == ref_space)) { 
             if (keyid.location === 2 && (

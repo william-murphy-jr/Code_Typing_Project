@@ -96,6 +96,7 @@ Keymap.prototype.unbind = function(key) {
 
 // Install this Keymap on the specified HTML element
 Keymap.prototype.install = function(element) {
+    this.element = element
 
  // This is the event-handler function
     var keymap = this;
@@ -117,8 +118,12 @@ Keymap.prototype.dispatch = function(event, element) {
     // On keyup remove cachedLocation value
     // to prevent cache contamination if a key is
     // pressed and released with no action.
-    document.addEventListener('keyup', function(e) {
-        cachedLocation = null;
+    this.element.addEventListener('keyup', function(event) {
+        console.log('addEventListner keyup: ', event.code);
+        if (event.key === "Shift") {  
+            cachedLocation = null;
+            console.log("addEventListner 'keyup': event.key ===******:", event.key);
+        } 
     });
 
     // Build the modifier string in canonical lowercase alphabetical order.
