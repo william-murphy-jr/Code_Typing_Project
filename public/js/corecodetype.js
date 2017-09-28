@@ -107,31 +107,32 @@ function updateDisplay(state) {
 
     $('.code span').eq(idx).addClass('underline');
 
-    finishedTest(idx);
+    if (idx >= charLength) { 
+        finishedTest(idx);
+    }
 
 } // updateDisplay
 
 function finishedTest () {
-    console.log('inside finishedTest');
+
+    console.log(' \n ******* Test Stats *******');
     console.log('idx: ', idx);
     console.log('charLength: ', charLength);
     console.log('correct count: ', correct);
     console.log('partial: ', partial);
     console.log('incorrect count: ', incorrect);
     console.log('Total key count: ', correct + partial + incorrect);
-    console.log("finishedTest() cachedLocation: ", cachedLocation);
 
     stop = Date.now();
 
     var elapsedTime = (stop - start) / 1000;
     var words = Math.round(charLength / 5);
+    var wpm = Math.round((60 / elapsedTime) * words);
+    var accuracy = Math.round((correct / charLength) * 100);
 
-    var wpm = Math.round(
-        (60 / elapsedTime) * words);
-
-    console.log('Word per minute', wpm);
-
-    if (idx >= charLength) console.log(' ******* runDone *******');
+    console.log('Words per minute', wpm);
+    console.log('Accuracy ' + accuracy +'%');
+    console.log(' ******* Test Finished *******');
 
 } // finishedTest
 

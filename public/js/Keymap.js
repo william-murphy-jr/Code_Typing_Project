@@ -115,8 +115,8 @@ Keymap.prototype.dispatch = function(event, element) {
     var modifiers = {};
     var keyname = null;
 
-    // On Shift key, keyup remove cachedLocation value
-    // to prevent cache contamination if a key is
+    // On the Shift key's, keyup remove cachedLocation value.
+    // This will also prevent cache contamination if a key is
     // pressed and released with no action.
     this.element.addEventListener('keyup', function(event) {
         if (event.key === "Shift") {  
