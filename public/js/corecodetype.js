@@ -40,7 +40,7 @@ function compareChar(char, event, keyid) {
             char == "&" || char == "~" || char == "!" || char == "@" || 
             char == "#" || char == "$" || char == "%" || char == "^" || 
             char == "&" )) {
-                console.log('***** location 2 & correct *****');
+                if (debug) console.log('***** location 2 & correct *****');
                 correct++;
                 return 2;
             } else if (keyid.location === 1 && (
@@ -130,6 +130,7 @@ function finishedTest () {
     var wpm = Math.round((60 / elapsedTime) * words);
     var accuracy = Math.round((correct / charLength) * 100);
 
+    console.log('Elapsed time ' + Math.round(elapsedTime) + ' seconds');
     console.log('Words per minute', wpm);
     console.log('Accuracy ' + accuracy +'%');
     console.log(' ******* Test Finished *******');
