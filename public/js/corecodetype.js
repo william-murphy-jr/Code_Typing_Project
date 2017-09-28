@@ -2,11 +2,14 @@
 'use strict';
 console.log('corecodetype.js');
 
-var debug = true;
-// var debug = false;
+// var debug = true;
+var debug = false;
 
 var typing = false;
 var idx = 0;
+var correct = 0, partial = 0, incorrect = 0,
+start, stop;
+var charLength;
 
 // This is a reference for &nbsp; in the html.
 // Needed to because a " " by &nbsp; does not
@@ -16,6 +19,7 @@ var ref_space = $('#spacebar_ref').text();
 function getChar(idx) {
     // console.log('getChar');
     var char = $('.code span').eq(idx).text();
+    if (!typing) start = Date.now();
     return char;
 }
 
@@ -26,7 +30,7 @@ function compareChar(char, event, keyid) {
     if (event.key == char || 
         (event.code == "Space" && char == ref_space)) { 
             if (keyid.location === 2 && (
-            char == "`" || char == "1" || char =="2" || char == "3" ||
+            char == "`" || char == "1" || char == "2" || char == "3" ||
             char == "4" || char == "5" || char == "6" || char == "q" || 
             char == "W" || char == "E" || char == "R" || char == "T" ||  
             char == "A" || char == "S" || char == "D" || char == "F" || 
@@ -37,9 +41,10 @@ function compareChar(char, event, keyid) {
             char == "#" || char == "$" || char == "%" || char == "^" || 
             char == "&" )) {
                 console.log('***** location 2 & correct *****');
+                correct++;
                 return 2;
             } else if (keyid.location === 1 && (
-            char == "7" || char == "8" || char =="9" || char == "0" ||
+            char == "7" || char == "8" || char == "9" || char == "0" ||
             char == "-" || char == "=" || char == "Y" || char == "U" || 
             char == "I" || char == "O" || char == "P" || char == "[" ||  
             char == "]" || char == "\\" || char == "H" || char == "J" || 
@@ -50,15 +55,19 @@ function compareChar(char, event, keyid) {
             char == "}" || char == ":" || char == "\"" || char == "<" ||
             char == ">" || char == "?" )) {
                 if (debug) console.log('**** location 1 && correct ****');
+                correct++;
                 return 2;
             } else if (keyid.location === 1 || keyid.location === 2 ) { 
                 if (debug) console.log('else partial correct return 1');
+                partial++;
                 return 1; 
             } else {
                 if (debug) console.log("lowercase letter's correct");
+                correct++;
                 return 2;
             }
     } else {
+        incorrect++;
         return -1;
     }
 }  // compareChar
@@ -68,8 +77,23 @@ function updateDisplay(state) {
     var last = idx - 1;
 
     // reset these for the next key press/event
-    locationFired = false;
-    cachedLocation = null;
+    // locationFired = false;
+
+    // On keyup remove cachedLocation value
+    // to prevent cache contamination if a key is
+    // pressed and released with no action.
+    keyMap.element.addEventListener('keyup', function(event) {
+        console.log('addEventListner keyup event.key', event.key);
+        if (event.key === "Shift") {  
+            console.log("EventListner 'keyup': Before cachedLocation: ", cachedLocation);
+            // cachedLocation = null;
+            locationFired = false;
+            console.log("EventListner 'keyup': After cachedLocation: ", cachedLocation);
+            console.log("EventListner 'keyup': event.code: ", event.key);
+        } 
+    });
+
+    // cachedLocation = null;
 
     if (state === 2) { 
         display = 'correct'
@@ -82,35 +106,54 @@ function updateDisplay(state) {
     }
     
     $('.code span').eq(idx).addClass(display);
-
     
     if (!typing) { $('.code span').eq(0).removeClass('underline'); typing = true; }
     if (last >=0) { $('.code span').eq(idx).removeClass('underline'); }
-
-
-    // $('.code span').eq(idx).removeClass('underline');
 
     idx++;
 
     $('.code span').eq(idx).addClass('underline');
 
+    finishedTest(idx);
 
 } // updateDisplay
+
+function finishedTest () {
+    console.log('inside finishedTest');
+    console.log('idx: ', idx);
+    console.log('charLength: ', charLength);
+    console.log('correct count: ', correct);
+    console.log('partial: ', partial);
+    console.log('incorrect count: ', incorrect);
+    console.log('Total key count: ', correct + partial + incorrect);
+    console.log("finishedTest() cachedLocation: ", cachedLocation);
+
+    stop = Date.now();
+
+    var elapsedTime = (stop - start) / 1000;
+    var words = Math.round(charLength / 5);
+
+    var wpm = Math.round(
+        (60 / elapsedTime) * words);
+
+    console.log('Word per minute', wpm);
+
+    if (idx >= charLength) console.log(' ******* runDone *******');
+
+} // finishedTest
 
 
 $('.code span').eq(idx).addClass('underline');
 
+charLength = $('.code span').length;
+// console.log('charLength: ', charLength);
+
 function keyHandler(event, keyid) {
-
-    // $('.code span').eq(idx).addClass('underline');
-
     var char = getChar(idx);
-
     var state = compareChar(char, event, keyid);
 
-    console.log('state',  state);
-
     updateDisplay(state);
+
 
 }  // keyHandler
 
@@ -123,17 +166,17 @@ function keyHandler(event, keyid) {
 // value is the handler function keyHandler()
 var keyBindings =  keyHandlerBingings();
 
-var myKeyMap = new Keymap(keyBindings);
+var keyMap = new Keymap(keyBindings);
 
 // Install keymap on document
-myKeyMap.install(document);
+keyMap.install(document);
 
-if (debug) {
-    document.addEventListener('keydown', function(e) {
-     e.key;
-     // debugger;
-     console.log('e.key: ', e.key);
-     console.log('e.code: ', e.code);
-     console.log('e.location: ', e.location);
-    });    
-}
+// if (debug) {
+//     document.addEventListener('keydown', function(e) {
+//      e.key;
+//      // debugger;
+//      console.log('e.key: ', e.key);
+//      console.log('e.code: ', e.code);
+//      console.log('e.location: ', e.location);
+//     });    
+// }

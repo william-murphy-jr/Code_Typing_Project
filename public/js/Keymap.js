@@ -119,10 +119,12 @@ Keymap.prototype.dispatch = function(event, element) {
     // to prevent cache contamination if a key is
     // pressed and released with no action.
     this.element.addEventListener('keyup', function(event) {
-        console.log('addEventListner keyup: ', event.code);
+        console.log('EventListner keyup event.key: ', event.key);
+        console.log("EventListner 'keyup': Before cachedLocation: ", cachedLocation);
         if (event.key === "Shift") {  
             cachedLocation = null;
-            console.log("addEventListner 'keyup': event.key ===******:", event.key);
+            console.log("EventListner 'keyup': ‘After cachedLocation: ", cachedLocation);
+            // console.log("addEventListner 'keyup': event.key: ", event.key);
         } 
     });
 
@@ -133,6 +135,7 @@ Keymap.prototype.dispatch = function(event, element) {
     // if (event.ctrlKey) { modifiers += "ctrl_";   if (debug) console.log('modifier ctrl_'); }
     // if (event.metaKey) { modifiers += "meta_";   if (debug) console.log('modifier meta_'); }
     
+    
     if (event.shiftKey) { 
         modifiers.modifier += "shift_";
         modifiers.location = event.location;
@@ -140,6 +143,7 @@ Keymap.prototype.dispatch = function(event, element) {
         if (!locationFired) {
             locationFired = true;
             cachedLocation = modifiers.location;
+            console.log("KeyMap.dispatch() reset cachedLocation: ", cachedLocation);
         }
         if (debug) console.log('modifier shift_');
     }
