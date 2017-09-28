@@ -115,16 +115,12 @@ Keymap.prototype.dispatch = function(event, element) {
     var modifiers = {};
     var keyname = null;
 
-    // On keyup remove cachedLocation value
+    // On Shift key, keyup remove cachedLocation value
     // to prevent cache contamination if a key is
     // pressed and released with no action.
     this.element.addEventListener('keyup', function(event) {
-        console.log('EventListner keyup event.key: ', event.key);
-        console.log("EventListner 'keyup': Before cachedLocation: ", cachedLocation);
         if (event.key === "Shift") {  
             cachedLocation = null;
-            console.log("EventListner 'keyup': ‘After cachedLocation: ", cachedLocation);
-            // console.log("addEventListner 'keyup': event.key: ", event.key);
         } 
     });
 
@@ -135,17 +131,16 @@ Keymap.prototype.dispatch = function(event, element) {
     // if (event.ctrlKey) { modifiers += "ctrl_";   if (debug) console.log('modifier ctrl_'); }
     // if (event.metaKey) { modifiers += "meta_";   if (debug) console.log('modifier meta_'); }
     
-    
+    // Changing modifiers to an obj allows us to simutaniously 
+    // store the keyid & modifier key location.
     if (event.shiftKey) { 
         modifiers.modifier += "shift_";
         modifiers.location = event.location;
-        
+       
         if (!locationFired) {
             locationFired = true;
             cachedLocation = modifiers.location;
-            console.log("KeyMap.dispatch() reset cachedLocation: ", cachedLocation);
         }
-        if (debug) console.log('modifier shift_');
     }
 
     // The keyname is easy if the DOM Level 3 key property is implemented:
@@ -167,7 +162,7 @@ Keymap.prototype.dispatch = function(event, element) {
     keyid.key = modifiers.modifier ? keyname : keyname;
     keyid.location = cachedLocation;
 
-    if (debug) console.log('keyid: ', keyid);
+    // if (debug) console.log('keyid: ', keyid);
 
     // Now see if the key identifier is bound to anything
     var handler = this.map[keyid.key];

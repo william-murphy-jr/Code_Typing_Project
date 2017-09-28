@@ -76,24 +76,17 @@ function updateDisplay(state) {
     var display = "";
     var last = idx - 1;
 
-    // reset these for the next key press/event
-    // locationFired = false;
-
-    // On keyup remove cachedLocation value
+    // On keyup allow removal of cached Location value
     // to prevent cache contamination if a key is
     // pressed and released with no action.
+    // Also required if key is held down between keys
+    // such as i++
     keyMap.element.addEventListener('keyup', function(event) {
-        console.log('addEventListner keyup event.key', event.key);
-        if (event.key === "Shift") {  
-            console.log("EventListner 'keyup': Before cachedLocation: ", cachedLocation);
-            // cachedLocation = null;
+        if (event.key === "Shift") {
+            // locationFired is declared in Keymap.js
             locationFired = false;
-            console.log("EventListner 'keyup': After cachedLocation: ", cachedLocation);
-            console.log("EventListner 'keyup': event.code: ", event.key);
         } 
     });
-
-    // cachedLocation = null;
 
     if (state === 2) { 
         display = 'correct'
