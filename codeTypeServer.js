@@ -3,7 +3,14 @@ var app = express();
 var router = express.Router();
 var path = __dirname + '/views/';
 var bodyParser = require('body-parser');
+var path = require('path');
+var pathPublic = path.resolve(__dirname, "public");
 // var multer = require('multer');
+var morgan = require('morgan');
+
+
+// Controllers
+var coreType = require('./controllers/coreType');
 
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
@@ -13,43 +20,14 @@ var body = require('body-parser');
 
 app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars')
-var fortune = require('./lib/fortune.js');
 
 app.set('port', process.env.PORT || 9000);
+app.use(express.static(pathPublic));
 
-app.use(express.static(__dirname + '/public'));
-
-// app.use(function(req, res, next) {
-// 	res.locals.showTests = app.get('env') !== 'production' && req.query.test === '1';
-// 	next();
-// });
+app.use(morgan('dev'));
 
 // Routes:
-app.get('/', function(req, res) {
-	res.render('home');
-});
-
-// app.get('/about', function(req, res) {
-// 	// var randomFortune = fortune[Math.floor(Math.random() * fortune.length)];
-
-// 	res.render('about', { 
-// 		fortune: fortune.getFortune(),
-// 		pageTestScript: '/qa/tests-about.js' 
-// 	});
-// });
-
-// app.get('/tours/hood-river', function(req, res){
-// 	res.render('tours/hood-river');
-// });
-
-// app.get('/tours/oregon-coast', function(req, res){
-// 	res.render('tours/oregon-coast');
-// });
-
-// app.get('/tours/request-group-rate', function(req, res){
-//     res.render('tours/request-group-rate');
-// });
-
+app.get('/', coreType.home);
 
 // custom 404 page
 app.use(function(req, res, next) {

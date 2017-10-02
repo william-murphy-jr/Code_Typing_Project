@@ -1,13 +1,15 @@
 {
-  "name" : "website-using-express",
-  "version" : "0.0.1",
+  "name": "website-using-express",
+  "version": "0.0.1",
   "description": "this follows the web dev w/node & express tutorial",
-  "scripts" : {
-    "start" : "node_modules/nodemon/bin/nodemon.js codeTypeServer.js"
+  "scripts": {
+    "start": "node_modules/nodemon/bin/nodemon.js codeTypeServer.js"
   },
-  "dependencies" : {
-    "express" : "latest",
-    "express3-handlebars": "^0.5.1"
+  "dependencies": {
+    "body-parser": "^1.16.0",
+    "express": "latest",
+    "express3-handlebars": "^0.5.1",
+    "morgan": "^1.8.0"
   },
   "devDependencies": {
     "chai": "1.10.0",
