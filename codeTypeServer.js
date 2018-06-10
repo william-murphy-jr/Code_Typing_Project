@@ -3,9 +3,7 @@ var app = express();
 var router = express.Router();
 var path = __dirname + '/views/';
 var bodyParser = require('body-parser');
-var path = require('path');
 var pathPublic = path.resolve(__dirname, "public");
-// var multer = require('multer');
 var morgan = require('morgan');
 
 
@@ -46,7 +44,7 @@ app.use(function(err, req, res, next) {
 // Start the server
 app.listen(app.get('port'), function(){
   console.log("Live at Port " + app.get('port') 
-  	+ " \nPress Control-C to terminate node server");
+  	+ " \nPress Control-C to terminate server");
 });
 
 
